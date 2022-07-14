@@ -1,0 +1,17 @@
+controller:
+  service:
+    loadBalancerIP: "${external_ip}"
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      memory: 80Mi
+  stats:
+    enabled: true
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: prometheus

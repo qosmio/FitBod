@@ -1,0 +1,136 @@
+alertmanager:
+  ingress:
+    enabled: true
+    annotations: 
+      kubernetes.io/ingress.class: nginx
+      ingress.kubernetes.io/rewrite-target: "/"
+    paths:
+    - /alert
+  alertmanagerSpec:
+    routePrefix: /alert
+    tolerations:
+      - key: group
+        operator: Equal
+        value: monitoring
+        effect: NoSchedule
+  service:
+    type: NodePort
+grafana:
+  env:
+    GF_SERVER_ROOT_URL: /grafana
+    GF_SERVER_SERVE_FROM_SUB_PATH: "true"
+  persistence:
+    type: pvc
+    enabled: true
+    storageClassName: ${grafana_pv.spec[0].storage_class_name}
+    accessModes:
+      - ${tolist(grafana_pv.spec[0].access_modes)[0]}
+    size: ${grafana_pv.spec[0].capacity.storage}
+  service:
+    type: NodePort
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      ingress.kubernetes.io/rewrite-target: "/"
+    path: /grafana
+  adminUser: "${admin_user}"
+  adminPassword: "${admin_pass}"
+kubeControllerManager:
+  enabled: false
+kubeEtcd:
+  enabled: false
+kubeScheduler:
+  enabled: false
+prometheus:
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+    paths: 
+      - /prom
+  # service:
+    # type: NodePort
+  prometheusSpec:
+    # externalUrl: "/prom"
+    routePrefix: /prom
+    enableAdminAPI: true
+    scrapeInterval: 30s
+    evaluationInterval: 30s
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+          - ${tolist(prom_pv.spec[0].access_modes)[0]}
+          resources:
+            requests:
+              storage: ${prom_pv.spec[0].capacity.storage}
+          storageClassName: ${prom_pv.spec[0].storage_class_name}
+    serviceMonitorSelectorNilUsesHelmValues: false
+    ruleSelector:
+      matchExpressions:
+        - key: release
+          operator: In
+          values:
+            - prometheus
+            - pushgateway
+    serviceMonitorSelector:
+      matchExpressions:
+        - key: release
+          operator: In
+          values:
+            - prometheus
+            - pushgateway
+  resources:
+    limits:
+      cpu: 200m
+      memory: 200Mi
+    requests:
+      cpu: 100m
+      memory: 100Mi
+prometheusOperator:
+  enabled: true
+  resources:
+    requests:
+      cpu: 15m
+      memory: 100M
+    limits:
+      cpu: 60m
+      memory: 300M
+  tls:
+    enabled: false
+  admissionWebhooks:
+    enabled: false
+
+# prometheus-node-exporter:
+#   prometheus:
+#     monitor:
+#       enabled: true
+#       relabelings: 
+#         - regex: (.+)
+#           sourceLabels:
+#             - __meta_kubernetes_endpoint_node_name
+#           targetLabel: node
+#
+# kube-state-metrics:
+#   prometheus:
+#     monitor:
+#       enabled: true
+#       additionalLabels:
+#         release: prom
+#
+kubeApiServer:
+    enabled: true
+kubelet:
+    enabled: true
+    metricRelabelings:
+      - action: replace
+        sourceLabels:
+          - node
+        targetLabel: instance
+coreDns:
+    enabled: false
+kubeProxy:
+    enabled: true
+kubeStateMetrics:
+    enabled: true
