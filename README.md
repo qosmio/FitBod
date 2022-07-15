@@ -6,8 +6,25 @@
 This repository contains the Terraform infrastructure needed to deploy and configure Fitbod's sample "myworkout" app.
 
 ## Table of Contents
+- [Design Principles](#design-principles)
+  * [Architecture](#architecture)
+- [Prerequisites](#prerequisites)
+- [Requirements](#requirements)
+- [Initial setup](#initial-setup)
+- [Deployment](#deployment)
+  * [Automatic (recommended)](#automatic-recommended)
+  * [Manual](#manual)
+- [Testing](#testing)
+- [Screenshots](#screenshots)
+  * [Sample output of `run.sh` deployment script](#sample-output-of-runsh-deployment-script)
+  * [Grafana Dashboard](#grafana-dashboard)
+- [Terraform Modules](#modules)
+  * [Providers](MODULES.md#providers)
+  * [Resources](MODULES.md#resources)
+  * [Inputs](MODULES.md#inputs)
+  * [Outputs](MODULES.md#outputs)
 
-# Design Principles
+## Design Principles
 
 -	**Automation**: Utilize [Terraform](https://www.terraform.io/docs/providers/google/index.html) as the main automation framework, along with custom scripts to handle deployment with little need for user interaction.
 
