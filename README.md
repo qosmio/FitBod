@@ -60,6 +60,7 @@ It's assumed the end user has a Google Cloud Platform account with an **existing
 - [terraform](https://www.terraform.io/downloads.html)
 - [gcloud](https://cloud.google.com/sdk/gcloud/)
 - [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+- [jq](https://stedolan.github.io/jq/download/) (json cli tool used to run testing script)
 - bash (to run deployment script)
 - Linux/Unix/MacOS (deployment script was not tested on Windows, but should work)
 
@@ -80,7 +81,7 @@ gcloud auth application-default login
 Initialize dependancies
 
 ```css
-git clone https://github.com/qosmio/Fitbod-DevOps fitbod
+git clone https://github.com/qosmio/Fitbod fitbod
 cd fitbod
 terraform init -upgrade
 ```
@@ -125,5 +126,5 @@ Check the output from `run.sh` to find the url as well as the username and login
 ![run.sh](screenshots/grafana.png)
 
 ## Modules
-[**Complete README of Terraform Modules**](https://github.com/qosmio/Fitbod-DevOps/master/MODULES.md)
+[**Complete README of Terraform Modules**](MODULES.md)
 <!-- END_TF_DOCS -->
