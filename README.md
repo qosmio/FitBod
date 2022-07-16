@@ -103,6 +103,21 @@ cd fitbod
 terraform init -upgrade
 ```
 
+### Configuration Setup
+
+A valid `project_id` must be provided which points to an existing project on GCP. Update the config file `config/tfvars/terraform.tf` acordingly.
+
+```hcl   
+project_id             = "<PROJECT ID"
+```
+
+Further environment configuration like region/zone/machine types can be updated in the `config/tfvars/dev.tf` file
+```hcl
+
+db_availability_type   = "ZONAL"
+gcp_zones              = ["us-east1-d"]
+```
+
 ## Deployment
 
 ### Automatic (recommended)
